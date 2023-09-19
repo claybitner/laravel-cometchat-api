@@ -8,8 +8,6 @@ class LaravelCometChatAPIServiceProvider extends BaseServiceProvider
 {
     /**
      * Register services.
-     *
-     * @return void
      */
     public function register(): void
     {
@@ -22,8 +20,6 @@ class LaravelCometChatAPIServiceProvider extends BaseServiceProvider
 
     /**
      * Bootstrap services.
-     *
-     * @return void
      */
     public function boot(): void
     {

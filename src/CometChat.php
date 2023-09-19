@@ -52,7 +52,7 @@ class CometChat
     public static function createGroup(
         $guid,
         $name,
-        $password,
+        $password = null,
         $type = 'private',
         $icon = null,
         $description = null,
@@ -66,8 +66,10 @@ class CometChat
         $method = 'POST';
         $parameters['guid'] = $guid;
         $parameters['name'] = $name;
-        $parameters['password'] = $password;
         $parameters['type'] = $type;
+        if ($password) {
+            $parameters['password'] = $password;
+        }
         if ($icon) {
             $parameters['icon'] = $icon;
         }
