@@ -479,7 +479,7 @@ class CometChat
     {
         try {
             $client = new Client();
-            $apiUrl = 'https://'.self::$appId.'.api-'.self::$apiRegion.'.cometchat.io/'.self::$apiVersion.'/';
+            $apiUrl = 'https://'.self::$appId.'.api-'.self::$apiRegion.'.cometchat.io/'.self::$apiVersion;
 
             $headers = [
                 'Accept' => 'application/json',
