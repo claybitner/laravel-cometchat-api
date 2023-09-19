@@ -1,0 +1,38 @@
+{
+    "name": "claybitner/laravel-cometchat-api",
+    "description": "A Laravel Library for Connecting to the Cometchat API",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1",
+        "ext-json": "*",
+        "illuminate/support": "^8.0",
+        "guzzlehttp/guzzle": "^7.2"
+    }
+    "authors": [
+        {
+            "name": "Clay Bitner",
+            "email": "claybitner@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "DigitalIndoorsmen\\LaravelCometChatAPI\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "DigitalIndoorsmen\\LaravelCometChatAPI\\LaravelCometChatAPIServiceProvider"
+            ],
+            "aliases": {
+                "CometChat": "DigitalIndoorsmen\\LaravelCometChatAPI\\LaravelCometChatAPIServiceFacade"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
