@@ -40,6 +40,5 @@ return [
     | The App ID that was generated when you created your app from the dashboard.
     |
     */
-    'app_id'  => config('COMETCHAT_APP_ID', ''),
+    'app_id' => config('COMETCHAT_APP_ID', ''),
 ];
-

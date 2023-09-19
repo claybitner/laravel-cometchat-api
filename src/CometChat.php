@@ -5,21 +5,26 @@ namespace DigitalIndoorsmen\LaravelCometChatAPI;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Message;
+
 use function json_decode;
 use function mb_strtolower;
 
 class CometChat
 {
     private static $apiKey;
+
     private static $apiRegion;
+
     private static $apiVersion;
+
     private static $appId;
-    public static  $onBehalfOf;
+
+    public static $onBehalfOf;
 
     /**
      * CometChat Api constructor.
      */
-    public function __construct($onBehalfOf=null)
+    public function __construct($onBehalfOf = null)
     {
         self::$apiKey = config('cometchat.api_key');
         self::$apiRegion = config('cometchat.api_region');
@@ -31,26 +36,24 @@ class CometChat
     /**
      * Create a Group
      *
-     * @param $guid
-     * @param $name
-     * @param string $password
-     * @param string $type
-     * @param null $icon
-     * @param null $description
-     * @param array  $metadata
-     * @param null $owner
-     * @param array  $tags
-     * @param array  $members
-     * @param array  $parameters
-     *
+     * @param  string  $password
+     * @param  string  $type
+     * @param  null  $icon
+     * @param  null  $description
+     * @param  array  $metadata
+     * @param  null  $owner
+     * @param  array  $tags
+     * @param  array  $members
+     * @param  array  $parameters
      * @return false|\Psr\Http\Message\StreamInterface
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public static function createGroup(
         $guid,
         $name,
         $password,
-        $type='private',
+        $type = 'private',
         $icon = null,
         $description = null,
         $metadata = [],
@@ -65,24 +68,36 @@ class CometChat
         $parameters['name'] = $name;
         $parameters['password'] = $password;
         $parameters['type'] = $type;
-        if ($icon) $parameters['icon'] = $icon;
-        if ($description) $parameters['description'] = $description;
-        if ($metadata) $parameters['metadata'] = $metadata;
-        if ($owner) $parameters['owner'] = $owner;
-        if ($tags) $parameters['tags'] = $tags;
-        if ($members) $parameters['members'] = $members;
+        if ($icon) {
+            $parameters['icon'] = $icon;
+        }
+        if ($description) {
+            $parameters['description'] = $description;
+        }
+        if ($metadata) {
+            $parameters['metadata'] = $metadata;
+        }
+        if ($owner) {
+            $parameters['owner'] = $owner;
+        }
+        if ($tags) {
+            $parameters['tags'] = $tags;
+        }
+        if ($members) {
+            $parameters['members'] = $members;
+        }
+
         return self::sendRequest($path, $method, $parameters);
     }
-
 
     /**
      * List Groups
      *
-     * @param null $searchKey
-     * @param int    $page
-     * @param array  $parameters
-     *
+     * @param  null  $searchKey
+     * @param  int  $page
+     * @param  array  $parameters
      * @return false|\Psr\Http\Message\StreamInterface
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public static function listGroups(
@@ -92,7 +107,9 @@ class CometChat
     ) {
         $path = '/groups';
         $method = 'GET';
-        if ($searchKey) $parameters['searchKey'] = $searchKey;
+        if ($searchKey) {
+            $parameters['searchKey'] = $searchKey;
+        }
         $parameters['page'] = $page;
 
         return self::sendRequest($path, $method, $parameters);
@@ -101,10 +118,10 @@ class CometChat
     /**
      * Get Group
      *
-     * @param string $guid
-     * @param array  $parameters
-     *
+     * @param  string  $guid
+     * @param  array  $parameters
      * @return false|\Psr\Http\Message\StreamInterface
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public static function getGroup(
@@ -113,17 +130,16 @@ class CometChat
     ) {
         $path = '/groups/'.$guid;
         $method = 'GET';
-        
+
         return self::sendRequest($path, $method, $parameters);
     }
-  
-     /**
+
+    /**
      * Update a Group
      *
-     * @param $guid
-     * @param array  $parameters
-     *
+     * @param  array  $parameters
      * @return false|\Psr\Http\Message\StreamInterface
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public static function updateGroup(
@@ -132,16 +148,16 @@ class CometChat
     ) {
         $path = '/groups/'.$guid;
         $method = 'POST';
-        
+
         return self::sendRequest($path, $method, $parameters);
     }
 
     /**
      * Delete a Group
      *
-     * @param $guid
      *
      * @return false|\Psr\Http\Message\StreamInterface
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public static function deleteGroup(
@@ -149,21 +165,20 @@ class CometChat
     ) {
         $path = '/groups/'.$guid;
         $method = 'DELETE';
-        
+
         return self::sendRequest($path, $method);
     }
 
     /**
      * Add Group Members
      *
-     * @param $guid
-     * @param array  $participants
-     * @param array  $moderators
-     * @param array  $admins
-     * @param array  $usersToBan
-     * @param array  $parameters
-     *
+     * @param  array  $participants
+     * @param  array  $moderators
+     * @param  array  $admins
+     * @param  array  $usersToBan
+     * @param  array  $parameters
      * @return false|\Psr\Http\Message\StreamInterface
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public static function addGroupMembers(
@@ -177,22 +192,29 @@ class CometChat
         $path = '/groups/'.$guid.'/members';
         $method = 'POST';
 
-        if ($participants) $parameters['participants'] = $participants;
-        if ($moderators) $parameters['moderators'] = $moderators;
-        if ($admins) $parameters['admins'] = $admins;
-        if (usersToBan) $parameters['usersToBan'] = $usersToBan;
-        
+        if ($participants) {
+            $parameters['participants'] = $participants;
+        }
+        if ($moderators) {
+            $parameters['moderators'] = $moderators;
+        }
+        if ($admins) {
+            $parameters['admins'] = $admins;
+        }
+        if (usersToBan) {
+            $parameters['usersToBan'] = $usersToBan;
+        }
+
         return self::sendRequest($path, $method, $parameters);
     }
 
     /**
      * List Group Members
      *
-     * @param $guid
-     * @param int    $page
-     * @param array  $parameters
-     *
+     * @param  int  $page
+     * @param  array  $parameters
      * @return false|\Psr\Http\Message\StreamInterface
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public static function listGroupMembers(
@@ -203,20 +225,17 @@ class CometChat
         $path = '/groups/'.$guid.'/members';
         $method = 'GET';
 
-        
         $parameters['page'] = $page;
-        
+
         return self::sendRequest($path, $method, $parameters);
     }
 
     /**
      * Add Group Members
      *
-     * @param $guid
-     * @param $uid
-     * @param $role
      *
      * @return false|\Psr\Http\Message\StreamInterface
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public static function updateGroupMemberRole(
@@ -231,17 +250,16 @@ class CometChat
         $parameters['guid'] = $guid;
         $parameters['uid'] = $uid;
         $parameters['scope'] = $role;
-      
+
         return self::sendRequest($path, $method, $parameters);
     }
 
     /**
      * Remove Group Members
      *
-     * @param $guid
-     * @param $uid
      *
      * @return false|\Psr\Http\Message\StreamInterface
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public static function deleteGroupMember(
@@ -257,11 +275,11 @@ class CometChat
     /**
      * Create a user
      *
-     * @param  $guid
+     * @param    $guid
      * @param  null  $name
      * @param  array  $parameters
-     *
      * @return false|\Psr\Http\Message\StreamInterface
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public static function createUser(
@@ -280,10 +298,9 @@ class CometChat
     /**
      * Update a user
      *
-     * @param $uid
      * @param  null  $parameters
-     *
      * @return false|\Psr\Http\Message\StreamInterface
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public static function updateUser(
@@ -299,9 +316,9 @@ class CometChat
     /**
      * Delete a user
      *
-     * @param $uid
      *
      * @return \Psr\Http\Message\StreamInterface
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public static function deleteUser($uid)
@@ -316,9 +333,9 @@ class CometChat
     /**
      * Deactivate a user
      *
-     * @param $uid
      *
      * @return \Psr\Http\Message\StreamInterface
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public static function deactivateUser($uid)
@@ -333,9 +350,9 @@ class CometChat
     /**
      * Reactivate a user or users
      *
-     * @param $uids
      *
      * @return \Psr\Http\Message\StreamInterface
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public static function reactivateUser($uids)
@@ -350,10 +367,9 @@ class CometChat
     /**
      * Create a user auth token
      *
-     * @param $uid
      * @param  bool  $force
-     *
      * @return \Psr\Http\Message\StreamInterface
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public static function createToken($uid, $force = false)
@@ -368,10 +384,9 @@ class CometChat
     /**
      * Delete a user auth token
      *
-     * @param $uid
-     * @param $authToken
      *
      * @return \Psr\Http\Message\StreamInterface
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public static function deleteToken($uid, $authToken)
@@ -385,10 +400,9 @@ class CometChat
     /**
      * Block Users
      *
-     * @param $uid
-     * @param $blockedUsers
      *
      * @return \Psr\Http\Message\StreamInterface
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public static function blockUsers($uid, $blockedUsers = [])
@@ -403,10 +417,9 @@ class CometChat
     /**
      * Unblock Users
      *
-     * @param $uid
-     * @param $blockedUsers
      *
      * @return \Psr\Http\Message\StreamInterface
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public static function unblockUsers($uid, $blockedUsers = [])
@@ -421,10 +434,9 @@ class CometChat
     /**
      * Add Friends
      *
-     * @param $uid
-     * @param $friends
      *
      * @return \Psr\Http\Message\StreamInterface
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public static function addFriends($uid, $friends = [])
@@ -439,10 +451,9 @@ class CometChat
     /**
      * Delete Friends
      *
-     * @param $uid
-     * @param $friends
      *
      * @return \Psr\Http\Message\StreamInterface
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public static function deleteFriends($uid, $friends = [])
@@ -457,11 +468,9 @@ class CometChat
     /**
      * Send a request and retrieve the response from the CometChat API
      *
-     * @param $path
-     * @param $method
-     * @param $data
      *
      * @return false|\Psr\Http\Message\StreamInterface
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private static function sendRequest($path, $method, $data = null)
@@ -471,17 +480,17 @@ class CometChat
             $apiUrl = 'https://'.self::$appId.'.api-'.self::$apiRegion.'.cometchat.io/'.self::$apiVersion.'/';
 
             $headers = [
-                    'Accept'       => 'application/json',
-                    'Content-Type' => 'application/json',
-                    'apiKey'       => self::$apiKey,
-                ];
-           if (self::$onBehalfOf && (strpos($path, "groups") === 0)) {
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+                'apiKey' => self::$apiKey,
+            ];
+            if (self::$onBehalfOf && (strpos($path, 'groups') === 0)) {
                 $headers['onBehalfOf'] = self::$onBehalfOf;
-           }
+            }
 
             $response = $client->request($method, $apiUrl.$path, [
                 'headers' => $headers,
-                'json'    => $data,
+                'json' => $data,
             ]);
 
             if ($response->getStatusCode() == '200') {

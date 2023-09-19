@@ -6,8 +6,6 @@ use Illuminate\Support\Facades\Facade;
 
 /**
  * Class LaravelCometChatAPIFacade
- *
- * @package DigitalIndoorsmen\LaravelCometChatAPI
  */
 class LaravelCometChatAPIFacade extends Facade
 {
@@ -19,4 +17,3 @@ class LaravelCometChatAPIFacade extends Facade
         return 'cometchat';
     }
 }
-
