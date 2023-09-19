@@ -149,7 +149,7 @@ class CometChat
         $parameters = []
     ) {
         $path = '/groups/'.$guid;
-        $method = 'POST';
+        $method = 'PUT';
 
         return self::sendRequest($path, $method, $parameters);
     }
@@ -203,7 +203,7 @@ class CometChat
         if ($admins) {
             $parameters['admins'] = $admins;
         }
-        if (usersToBan) {
+        if ($usersToBan) {
             $parameters['usersToBan'] = $usersToBan;
         }
 
@@ -246,7 +246,7 @@ class CometChat
         $role // must be participant, moderator, admin
     ) {
         $path = '/groups/'.$guid.'/members/'.$uid;
-        $method = 'POST';
+        $method = 'PUT';
 
         $parameters = [];
         $parameters['guid'] = $guid;
