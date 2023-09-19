@@ -11,7 +11,7 @@ class LaravelCometChatAPIServiceProvider extends BaseServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->bind('cometchat', function () {
 
@@ -25,11 +25,13 @@ class LaravelCometChatAPIServiceProvider extends BaseServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        //
-        $this->publishes([
-            __DIR__.'/config/cometchat-api.php' => config_path('cometchat-api.php'),
-        ], 'config');
+        // Publishes the configuration file when 'vendor:publish' is run
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__.'/config/cometchat.php' => config_path('cometchat.php'),
+            ], 'config');
+        }
     }
 }
