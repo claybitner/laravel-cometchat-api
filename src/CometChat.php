@@ -503,10 +503,7 @@ class CometChat
 
             return false;
         } catch (RequestException $e) {
-            echo Message::toString($e->getRequest());
-            if ($e->hasResponse()) {
-                echo Message::toString($e->getResponse());
-            }
+            return $e->hasResponse() ? json_decode((string)$e->getResponse()->getBody()) : $e->getMessage();
         }
     }
 }
