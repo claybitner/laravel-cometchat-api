@@ -275,6 +275,25 @@ class CometChat
     }
 
     /**
+     * Get User
+     *
+     * @param  string  $uid
+     * @param  array  $parameters
+     * @return false|\Psr\Http\Message\StreamInterface
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public static function getUser(
+        $uid,
+        $parameters = []
+    ) {
+        $path = '/users/'.$uid;
+        $method = 'GET';
+
+        return self::sendRequest($path, $method, $parameters);
+    }
+    
+    /**
      * Create a user
      *
      * @param    $guid
