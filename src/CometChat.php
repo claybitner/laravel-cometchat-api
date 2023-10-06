@@ -3,9 +3,11 @@
 namespace DigitalIndoorsmen\LaravelCometChatAPI;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Message;
 
+use Psr\Http\Message\StreamInterface;
 use function json_decode;
 use function mb_strtolower;
 
@@ -403,6 +405,56 @@ class CometChat
     }
 
     /**
+     * Update a user auth token
+     *
+     * @param $uid
+     * @param $authToken
+     * @param array $parameters
+     * @return StreamInterface
+     *
+     * @throws GuzzleException
+     */
+    public static function updateToken($uid, $authToken, array $parameters = [])
+    {
+        $path = '/users/'.$uid.'/auth_tokens/'.$authToken;
+        $method = 'PUT';
+
+        return self::sendRequest($path, $method, $parameters);
+    }
+
+    /**
+     * List a user's auth tokens
+     *
+     * @return \Psr\Http\Message\StreamInterface
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public static function listTokens($uid)
+    {
+        $path = '/users/'.$uid.'/auth_tokens';
+        $method = 'GET';
+
+        return self::sendRequest($path, $method);
+    }
+
+    /**
+     * List details of a user's auth token
+     *
+     * @return \Psr\Http\Message\StreamInterface
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public static function getToken($uid, $authToken)
+    {
+        $path = '/users/'.$uid.'/auth_tokens/'.$authToken;
+        $method = 'GET';
+
+        return self::sendRequest($path, $method);
+    }
+
+
+
+    /**
      * Delete a user auth token
      *
      *
@@ -413,6 +465,22 @@ class CometChat
     public static function deleteToken($uid, $authToken)
     {
         $path = '/users/'.$uid.'/auth_tokens/'.$authToken;
+        $method = 'DELETE';
+
+        return self::sendRequest($path, $method);
+    }
+
+    /**
+     * Deletes all a user's auth tokens
+     *
+     *
+     * @return \Psr\Http\Message\StreamInterface
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public static function flushTokens($uid)
+    {
+        $path = '/users/'.$uid.'/auth_tokens';
         $method = 'DELETE';
 
         return self::sendRequest($path, $method);
