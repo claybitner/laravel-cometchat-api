@@ -2,6 +2,7 @@
 
 namespace DigitalIndoorsmen\LaravelCometChatAPI;
 
+use DigitalIndoorsmen\LaravelCometChatAPI\DigitalIndoorsmen\LaravelCometChatAPI\CometChat;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 class LaravelCometChatAPIServiceProvider extends BaseServiceProvider
@@ -26,7 +27,7 @@ class LaravelCometChatAPIServiceProvider extends BaseServiceProvider
         // Publishes the configuration file when 'vendor:publish' is run
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/config/cometchat.php' => config_path('cometchat.php'),
+                __DIR__ . '/config/cometchat.php' => config_path('cometchat.php'),
             ], 'config');
         }
     }
