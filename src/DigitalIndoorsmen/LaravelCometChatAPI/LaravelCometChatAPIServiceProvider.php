@@ -2,7 +2,6 @@
 
 namespace DigitalIndoorsmen\LaravelCometChatAPI;
 
-use DigitalIndoorsmen\LaravelCometChatAPI\DigitalIndoorsmen\LaravelCometChatAPI\CometChat;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 class LaravelCometChatAPIServiceProvider extends BaseServiceProvider
