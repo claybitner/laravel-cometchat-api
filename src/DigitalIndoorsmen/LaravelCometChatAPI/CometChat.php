@@ -586,6 +586,10 @@ class CometChat
 
             $responseBody = (string) $response->getBody();
             Log::info('CometChat API response', [
+                'method' => $method,
+                'uri' => $apiUrl.$path,
+                'headers' => $headers,
+                'json' => $data,
                 'status' => $response->getStatusCode(),
                 'body' => json_decode($responseBody, true)
             ]);
@@ -598,6 +602,10 @@ class CometChat
         } catch (RequestException $e) {
             $errorMessage = $e->hasResponse() ? (string) $e->getResponse()->getBody() : $e->getMessage();
             Log::error('CometChat API request error', [
+                'method' => $method,
+                'uri' => $apiUrl.$path,
+                'headers' => $headers,
+                'json' => $data,
                 'error' => $errorMessage
             ]);
             return json_decode($errorMessage) ?: $e->getMessage();
