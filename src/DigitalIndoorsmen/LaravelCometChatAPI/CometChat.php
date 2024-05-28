@@ -7,6 +7,8 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Message;
 
+use Illuminate\Log\Logger;
+use Illuminate\Support\Facades\Log;
 use Psr\Http\Message\StreamInterface;
 use function json_decode;
 use function mb_strtolower;
@@ -582,15 +584,24 @@ class CometChat
                 'json' => $data,
             ]);
 
-            if ($response->getStatusCode() == '200') {
-                $data = (string) $response->getBody();
+            $responseBody = (string) $response->getBody();
+            Log::info('CometChat API response', [
+                'status' => $response->getStatusCode(),
+                'body' => json_decode($responseBody, true)
+            ]);
 
-                return json_decode($data);
+            if ($response->getStatusCode() == 200) {
+                return json_decode($responseBody);
             }
 
             return false;
         } catch (RequestException $e) {
-            return $e->hasResponse() ? json_decode((string)$e->getResponse()->getBody()) : $e->getMessage();
+            $errorMessage = $e->hasResponse() ? (string) $e->getResponse()->getBody() : $e->getMessage();
+            Log::error('CometChat API request error', [
+                'error' => $errorMessage
+            ]);
+            return json_decode($errorMessage) ?: $e->getMessage();
         }
     }
+
 }
