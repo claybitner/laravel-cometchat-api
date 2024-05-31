@@ -579,17 +579,21 @@ class CometChat
                 $headers['onBehalfOf'] = self::$onBehalfOf;
             }
 
-            $response = $client->request($method, $apiUrl.$path, [
-                'headers' => $headers,
-                'json' => $data,
-            ]);
+            $options = [
+                'headers' => $headers
+            ];
+
+            if (!empty($data)) {
+                $options['json'] = $data;
+            }
+
+            $response = $client->request($method, $apiUrl . $path, $options);
 
             $responseBody = (string) $response->getBody();
             Log::info('CometChat API response', [
                 'method' => $method,
                 'uri' => $apiUrl.$path,
-                'headers' => $headers,
-                'json' => $data,
+                'options' => $options,
                 'status' => $response->getStatusCode(),
                 'body' => json_decode($responseBody, true)
             ]);
@@ -604,8 +608,7 @@ class CometChat
             Log::error('CometChat API request error', [
                 'method' => $method,
                 'uri' => $apiUrl.$path,
-                'headers' => $headers,
-                'json' => $data,
+                'options' => $options,
                 'error' => $errorMessage
             ]);
             return json_decode($errorMessage) ?: $e->getMessage();
