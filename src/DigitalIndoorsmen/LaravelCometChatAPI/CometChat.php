@@ -557,6 +557,21 @@ class CometChat
     }
 
     /**
+     * Message Stats
+     *
+     * @return false|\Psr\Http\Message\StreamInterface
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public static function messageStats(
+    ) {
+        $path = '/stats/messages';
+        $method = 'GET';
+
+        return self::sendRequest($path, $method);
+    }
+
+    /**
      * Send a request and retrieve the response from the CometChat API
      *
      *
