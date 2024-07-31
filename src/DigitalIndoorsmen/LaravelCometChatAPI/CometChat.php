@@ -571,6 +571,72 @@ class CometChat
         return self::sendRequest($path, $method);
     }
 
+    public static function listGroupMessages($guid, $parameters = []) {
+        $path = '/groups/'.$guid.'/messages';
+        $method = 'GET';
+        return self::sendRequest($path, $method, $parameters);
+    }
+
+    public static function getMessage($id, $parameters = []) {
+        $path = '/messages/'.$id;
+        $method = 'GET';
+        return self::sendRequest($path, $method, $parameters);
+    }
+
+    public static function reactToMessage($id, $reaction) {
+        $path = '/messages/'.$id.'/reactions/'.$reaction;
+        $method = 'POST';
+        return self::sendRequest($path, $method, []);
+    }
+
+    public static function removeMessageReaction($id, $reaction) {
+        $path = '/messages/'.$id.'/reactions/'.$reaction;
+        $method = 'DELETE';
+        return self::sendRequest($path, $method, []);
+    }
+
+    public static function deleteMessage($id, $parameters = []) {
+        $path = '/messages/'.$id;
+        $method = 'DELETE';
+        return self::sendRequest($path, $method, $parameters);
+    }
+
+    public static function updateMessage($id, $text, $metaData = [], $tags = [], $additionalParameters = []) {
+        $path = '/messages/'.$id;
+        $method = 'PUT';
+        $parameters['data'] = [];
+        $parameters['data']['text'] = $text;
+        $parameters['data']['metaData'] = $metaData;
+        $parameters['data'] = (object) $parameters['data'];
+        $parameters['tags'] = $tags;
+        foreach ($additionalParameters as $parameter => $value) {
+            $parameters[$parameter] = $value;
+        }
+
+        return self::sendRequest($path, $method, $parameters);
+    }
+
+    public static function createGroupMessage($guid, $text, $type='text', $metaData = [], $tags = [], $additionalParameters = []) {
+        $path = '/messages';
+        $method = 'POST';
+        $parameters['data'] = [];
+        $parameters['data']['text'] = $text;
+        $parameters['data']['metaData'] = $metaData;
+        $parameters['data'] = (object) $parameters['data'];
+
+        $parameters['type'] = $type;
+        $parameters['receiver'] = $guid;
+        $parameters['receiverType'] = 'group';
+
+        $parameters['tags'] = $tags;
+        foreach ($additionalParameters as $parameter => $value) {
+            $parameters[$parameter] = $value;
+        }
+
+        return self::sendRequest($path, $method, $parameters);
+
+    }
+
     /**
      * Send a request and retrieve the response from the CometChat API
      *
