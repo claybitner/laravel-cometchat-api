@@ -656,6 +656,7 @@ class CometChat
         try {
             $client = new Client;
             $apiUrl = 'https://'.self::$appId.'.api-'.self::$apiRegion.'.cometchat.io/'.self::$apiVersion;
+            $uri = $apiUrl . $path;
 
             $headers = [
                 'Accept' => 'application/json',
@@ -672,17 +673,17 @@ class CometChat
 
             if ($method == 'GET' && ! empty($data)) {
                 $query = http_build_query($data);
-                $apiUrl .= '?'.$query;
+                $uri .= '?'.$query;
             } elseif (! empty($data)) {
                 $options['json'] = $data;
             }
 
-            $response = $client->request($method, $apiUrl.$path, $options);
+            $response = $client->request($method, $uri, $options);
 
             $responseBody = (string) $response->getBody();
             Log::info('CometChat API response', [
                 'method' => $method,
-                'uri' => $apiUrl.$path,
+                'uri' => $uri,
                 'options' => $options,
                 'status' => $response->getStatusCode(),
                 'body' => json_decode($responseBody, true),
@@ -697,7 +698,7 @@ class CometChat
             $errorMessage = $e->hasResponse() ? (string) $e->getResponse()->getBody() : $e->getMessage();
             Log::error('CometChat API request error', [
                 'method' => $method,
-                'uri' => $apiUrl.$path,
+                'uri' => $uri,
                 'options' => $options,
                 'error' => $errorMessage,
             ]);
