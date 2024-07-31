@@ -6,10 +6,9 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Message;
-
-use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\Log;
 use Psr\Http\Message\StreamInterface;
+
 use function json_decode;
 use function mb_strtolower;
 
@@ -296,11 +295,11 @@ class CometChat
 
         return self::sendRequest($path, $method, $parameters);
     }
-    
+
     /**
      * Create a user
      *
-     * @param    $guid
+     * @param  $guid
      * @param  null  $name
      * @param  array  $parameters
      * @return false|\Psr\Http\Message\StreamInterface
@@ -409,9 +408,6 @@ class CometChat
     /**
      * Update a user auth token
      *
-     * @param $uid
-     * @param $authToken
-     * @param array $parameters
      * @return StreamInterface
      *
      * @throws GuzzleException
@@ -453,8 +449,6 @@ class CometChat
 
         return self::sendRequest($path, $method);
     }
-
-
 
     /**
      * Delete a user auth token
@@ -571,37 +565,48 @@ class CometChat
         return self::sendRequest($path, $method);
     }
 
-    public static function listGroupMessages($guid, $parameters = []) {
+    public static function listGroupMessages($guid, $parameters = [])
+    {
         $path = '/groups/'.$guid.'/messages';
         $method = 'GET';
+
         return self::sendRequest($path, $method, $parameters);
     }
 
-    public static function getMessage($id, $parameters = []) {
+    public static function getMessage($id, $parameters = [])
+    {
         $path = '/messages/'.$id;
         $method = 'GET';
+
         return self::sendRequest($path, $method, $parameters);
     }
 
-    public static function reactToMessage($id, $reaction) {
+    public static function reactToMessage($id, $reaction)
+    {
         $path = '/messages/'.$id.'/reactions/'.$reaction;
         $method = 'POST';
+
         return self::sendRequest($path, $method, []);
     }
 
-    public static function removeMessageReaction($id, $reaction) {
+    public static function removeMessageReaction($id, $reaction)
+    {
         $path = '/messages/'.$id.'/reactions/'.$reaction;
         $method = 'DELETE';
+
         return self::sendRequest($path, $method, []);
     }
 
-    public static function deleteMessage($id, $parameters = []) {
+    public static function deleteMessage($id, $parameters = [])
+    {
         $path = '/messages/'.$id;
         $method = 'DELETE';
+
         return self::sendRequest($path, $method, $parameters);
     }
 
-    public static function updateMessage($id, $text, $metaData = [], $tags = [], $additionalParameters = []) {
+    public static function updateMessage($id, $text, $metaData = [], $tags = [], $additionalParameters = [])
+    {
         $path = '/messages/'.$id;
         $method = 'PUT';
         $parameters['data'] = [];
@@ -616,7 +621,8 @@ class CometChat
         return self::sendRequest($path, $method, $parameters);
     }
 
-    public static function createGroupMessage($guid, $text, $type='text', $metaData = [], $tags = [], $additionalParameters = []) {
+    public static function createGroupMessage($guid, $text, $type = 'text', $metaData = [], $tags = [], $additionalParameters = [])
+    {
         $path = '/messages';
         $method = 'POST';
         $parameters['data'] = [];
@@ -648,7 +654,7 @@ class CometChat
     private static function sendRequest($path, $method, $data = null)
     {
         try {
-            $client = new Client();
+            $client = new Client;
             $apiUrl = 'https://'.self::$appId.'.api-'.self::$apiRegion.'.cometchat.io/'.self::$apiVersion;
 
             $headers = [
@@ -661,14 +667,17 @@ class CometChat
             }
 
             $options = [
-                'headers' => $headers
+                'headers' => $headers,
             ];
 
-            if (!empty($data)) {
+            if ($method == 'GET' && ! empty($data)) {
+                $query = http_build_query($data);
+                $apiUrl .= '?'.$query;
+            } elseif (! empty($data)) {
                 $options['json'] = $data;
             }
 
-            $response = $client->request($method, $apiUrl . $path, $options);
+            $response = $client->request($method, $apiUrl.$path, $options);
 
             $responseBody = (string) $response->getBody();
             Log::info('CometChat API response', [
@@ -676,7 +685,7 @@ class CometChat
                 'uri' => $apiUrl.$path,
                 'options' => $options,
                 'status' => $response->getStatusCode(),
-                'body' => json_decode($responseBody, true)
+                'body' => json_decode($responseBody, true),
             ]);
 
             if ($response->getStatusCode() == 200) {
@@ -690,10 +699,10 @@ class CometChat
                 'method' => $method,
                 'uri' => $apiUrl.$path,
                 'options' => $options,
-                'error' => $errorMessage
+                'error' => $errorMessage,
             ]);
+
             return json_decode($errorMessage) ?: $e->getMessage();
         }
     }
-
 }
