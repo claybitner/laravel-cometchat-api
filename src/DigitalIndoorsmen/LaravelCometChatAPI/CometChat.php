@@ -36,6 +36,12 @@ class CometChat
         self::$onBehalfOf = $onBehalfOf;
     }
 
+    public static function setOnBehalfOf($onBehalfOf = null): CometChat
+    {
+        self::$onBehalfOf = $onBehalfOf;
+        return new self($onBehalfOf);
+    }
+
     /**
      * Create a Group
      *
