@@ -669,7 +669,7 @@ class CometChat
                 'Content-Type' => 'application/json',
                 'apiKey' => self::$apiKey,
             ];
-            if (self::$onBehalfOf && (strpos($path, 'groups') === 0)) {
+            if (self::$onBehalfOf) {
                 $headers['onBehalfOf'] = self::$onBehalfOf;
             }
 
