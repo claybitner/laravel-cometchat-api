@@ -39,6 +39,7 @@ class CometChat
     public static function setOnBehalfOf($onBehalfOf = null): CometChat
     {
         self::$onBehalfOf = $onBehalfOf;
+
         return new self($onBehalfOf);
     }
 
@@ -649,6 +650,31 @@ class CometChat
 
     }
 
+    public static function muteGroupNotifications(
+        $uid,
+        $groupIds = []
+    ) {
+        $path = '/notifications/v1/preferences/mute?uid='.$uid;
+        $method = 'PUT';
+
+        $until = (time() + (100 * 365 * 24 * 60 * 60)) * 1000;
+
+        $conversations = [];
+        foreach ($groupIds as $groupId) {
+            $conversations[] = [
+                'type' => 'group',
+                'id' => $groupId,
+                'until' => $until,
+            ];
+        }
+
+        $parameters = [
+            'conversations' => $conversations,
+        ];
+
+        return self::sendRequest($path, $method, $parameters);
+    }
+
     /**
      * Send a request and retrieve the response from the CometChat API
      *
@@ -662,7 +688,7 @@ class CometChat
         try {
             $client = new Client;
             $apiUrl = 'https://'.self::$appId.'.api-'.self::$apiRegion.'.cometchat.io/'.self::$apiVersion;
-            $uri = $apiUrl . $path;
+            $uri = $apiUrl.$path;
 
             $headers = [
                 'Accept' => 'application/json',
