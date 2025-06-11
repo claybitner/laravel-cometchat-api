@@ -675,6 +675,28 @@ class CometChat
         return self::sendRequest($path, $method, $parameters);
     }
 
+    public static function unmuteGroupNotifications(
+        $uid,
+        $groupIds = []
+    ) {
+        $path = '/notifications/v1/preferences/mute?uid='.$uid;
+        $method = 'DELETE';
+
+        $conversations = [];
+        foreach ($groupIds as $groupId) {
+            $conversations[] = [
+                'type' => 'group',
+                'id' => $groupId,
+            ];
+        }
+
+        $parameters = [
+            'conversations' => $conversations,
+        ];
+
+        return self::sendRequest($path, $method, $parameters);
+    }
+
     /**
      * Send a request and retrieve the response from the CometChat API
      *
