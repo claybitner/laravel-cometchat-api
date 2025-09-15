@@ -650,6 +650,32 @@ class CometChat
 
     }
 
+    public static function listPushTokens($uid, array $parameters = [])
+    {
+        $path = '/notifications/push/v1/tokens';
+        $method = 'GET';
+
+        // ensure uid is always present in the query
+        $parameters['authToken'] = $uid;
+
+        return self::sendRequest($path, $method, $parameters);
+    }
+
+    public static function registerPushToken($uid, $token, $provider, $platform, array $extra = [])
+    {
+        $path = '/notifications/push/v1/tokens';
+        $method = 'POST';
+
+        $parameters = array_merge([
+            'authToken'      => $uid,
+            'fcmToken'    => $token,
+            'providerId' => $provider,
+            'platform' => $platform,
+            'timezone' => 'America/Winnipeg'
+        ], $extra);
+        return self::sendRequest($path, $method, $parameters);
+    }
+
     public static function muteGroupNotifications(
         $uid,
         $groupIds = []
